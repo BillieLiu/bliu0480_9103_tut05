@@ -29,4 +29,4 @@ As mentioned in the first part, we can express the brushstrokes of a painting by
 
 ***Conclusion***
 
-I wanted to use **Particle Animation** to achieve special strokes in the artwork, incorporating particle dynamics and color to achieve the final effect.
+I wanted to use **Particle Animation** to achieve special strokes in the artwork, incorporating particle dynamics and color to achieve the final effect, and I think this effect will play a role in our final work.
