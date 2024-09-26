@@ -21,7 +21,7 @@ This unique brushwork reminds me of **particle animation**, a technique that com
 
 In this existing code, Particle Animation is used, where small particles combine into an artwork through different colors and motion paths. With each refresh, a new composition is formed.[Sample Code](https://openprocessing.org/sketch/2232980)
 
-![Sample code](readmeImages/Sample_code.png)
+![Sample code](readmeImages/sample_code.png)
 
 As mentioned in the first part, we can express the brushstrokes of a painting by coding particle positions, paths, and colors, and upon refreshing, the brushstrokes also refresh while retaining the motion path. However, the colors can be altered to enrich the visual effect. For *Wheat Field with Cypresses*, we could have the particles move continuously along a path, mimicking the wind-swept movement of the cypress trees in the painting.
 
