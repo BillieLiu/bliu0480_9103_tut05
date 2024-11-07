@@ -5,30 +5,34 @@ let imgoriginal; // Original background image
 let particles1 = []; // Array for particles in the sky layer
 let particles2 = []; // Array for particles in the water layer
 let particles3 = []; // Array for particles in the house layer
-let partSize1 = 10; // Particle size for sky layer
-let partSize2 = 25; // Particle size for water layer
-let partSize3 = 10; // Particle size for house layer
+let partSize1 = 10; // Size of sky circles
+let partSize2 = 25; // Size of water circles
+let partSize3 = 10; // Size of house circles
 let backgroundColor; // Background color
 let c1, c2, c3; // Colors for gradient background
 let mode = -1; // Mode to control particle behavior
-let start = false; // Toggle to start the animation
+let start = false; // Toggle to start animation
 let colChange = 0; // Variable to control color changes in particles
 
 function preload() {
   // Preload image resources
-  img1 = loadImage('Assests/sky1.png');
-  img2 = loadImage('Assests/water1.png'); 
-  img3 = loadImage('Assests/house.png'); 
-  imgoriginal = loadImage('Assests/1.jpg'); 
+  img1 = loadImage('Assests/sky1.png'); // Sky layer image
+  img2 = loadImage('Assests/water1.png'); // Water layer image
+  img3 = loadImage('Assests/house.png'); // house layer image
+  imgoriginal = loadImage('Assests/1.jpg'); // Original background image
 }
 
 function keyPressed() {
-  // Key press to trigger animation start
+   // Key press to trigger start or reset animation
   if (start) {
     if (key == 'a') {
-      mode = 0;
+      mode = 0; // Sets mode for particle movement
       createParticle(); // Initialize particles
       background(); // Set up background
+    } else if (key == 'b') {
+      mode = -1; // Reset mode
+      createParticle();
+      background();
     }
   } else {
     start = true;
@@ -43,7 +47,7 @@ function setup() {
 }
 
 function createParticle() {
-  // Create particles for each image layer based on pixel color and brightness
+  // Create particles for each layer based on pixel color and brightness
   particles1 = []; // Clear existing particles
   particles2 = [];
   particles3 = [];
@@ -112,8 +116,9 @@ function background() {
 }
 
 function draw() {
-  // Main animation loop, draws particles or introductionpage screen based on start variable
+  // Main animation loop, drawing particles or introductionpage screen based on start variable
   if (start) {
+    // Draw and update brightness of circles
     for (let i = 0; i < particles1.length; i++) {
       particles1[i].update();
       particles1[i].move();
@@ -137,67 +142,56 @@ function draw() {
 function introductionpage() {
   // Display the original image and instructions before starting particle animation
   image(imgoriginal, 0, 0, width, height);
-  fill(255);
-  textSize(25);
+  fill(255); // Set text color
+  textSize(25); // Set text size
   textAlign(CENTER, CENTER);
-  text("press A to start the particle motion", width / 2, height / 2);
+  text("press A to start the particle motion\npress B to return the original position", width / 2, height / 2);
 }
 
 class Particle {
-  // Particle Class: Defines properties and behavior of each particle
   constructor(x, y, col, w, h) {
+    // Initialize particle properties
     this.x = x;
     this.y = y;
     this.col = col;
-    this.init(); // Initialize color and position
+    this.init();
     this.w = w;
     this.h = h;
     this.size = 1;
   }
-
   display() {
-    // Display the particle as an ellipse
+    // Display particle as an ellipse
     noStroke();
     fill(this.r, this.g, this.b);
     ellipse(this.pos.x, this.pos.y, this.w * this.size, this.h * this.size);
   }
-
-  changeCol1() { // Changes particle color randomly if conditions are met
-    if (mode == 2 && colChange == 0) {
-      this.r = random(255);
-      this.g = random(255);
-      this.b = random(255);
-    }
-  }
-
-  changeCol2() { // Another color-changing method, setting grayscale values
-    if (mode == 2 && colChange == 0) {
-      this.r = random(255);
-      this.g = this.r;
-      this.b = this.g;
-    }
-  }
-
+  changeCol1() {} // Placeholder for color change function 1
+  changeCol2() {} // Placeholder for color change function 2
   update() {
-    this.size = 1;
+    if (mode == 1) {
+      // Update size based on noise if in mode 1
+      this.size = map(noise(this.pos.x * 0.01, this.pos.y * 0.01, frameCount * 0.05), 0, 1, 0.5, 3);
+    } else {
+      this.size = 1;
+    }
   }
-
-  init() { // Set initial position and color
+  init() {
+    // Set initial position and color values
     this.pos = createVector(this.x, this.y);
     this.vel = createVector();
     this.r = red(this.col);
     this.g = green(this.col);
     this.b = blue(this.col);
   }
-
-  displayLine() { // Display particles with a vertical oscillation effect
+  displayLine() {
+    // Display particles with a vertical oscillation effect
     noStroke();
     fill(this.r, this.g, this.b);
     ellipse(this.pos.x, this.pos.y + sin(this.pos.x * 0.01) * partSize2 * 0.5, this.w, this.h);
   }
-
-  move() { // Move particles using Perlin noise for a smooth randomized effect
+  move() {
     if (mode == 0) {
+      // Move particles using Perlin noise for smooth, random effect
       var angle = noise(this.pos.x * 0.01, this.pos.y * 0.01) * TWO_PI;
       this.vel.set(cos(angle), sin(angle));
       this.vel.mult(0.4);
