@@ -1,58 +1,63 @@
-let img1; // Image for sky layer
-let img2; // Image for water layer
-let img3; // Image for house layer
-let imgoriginal; // Original background image
-let particles1 = []; // Array for particles in the sky layer
-let particles2 = []; // Array for particles in the water layer
-let particles3 = []; // Array for particles in the house layer
-let partSize1 = 10; // Size of sky circles
-let partSize2 = 25; // Size of water circles
-let partSize3 = 10; // Size of house circles
-let backgroundColor; // Background color
+let img1; // image of sky
+let img2; // image of water
+let img3; // image of house
+let imgoriginal; // Original image for introductionpage
+let particles1 = []; // Array for first set of particles
+let particles2 = []; // Array for second set of particles
+let particles3 = []; // Array for third set of particles
+let partSize1 = 10; // Particle size for first set
+let partSize2 = 25; // Particle size for second set
+let partSize3 = 10; // Particle size for third set
 let c1, c2, c3; // Colors for gradient background
-let mode = -1; // Mode to control particle behavior
-let start = false; // Toggle to start animation
-let colChange = 0; // Variable to control color changes in particles
+let mode = -1; //  Mode for different particle behaviors
+let start = false; // Start flag to control introductionpage screen
+let colChange = 0; // Counter for color change in mode 2
 
+// Preload images before the program starts
 function preload() {
-  // Preload image resources
-  img1 = loadImage('Assests/sky1.png'); // Sky layer image
-  img2 = loadImage('Assests/water1.png'); // Water layer image
-  img3 = loadImage('Assests/house.png'); // house layer image
-  imgoriginal = loadImage('Assests/1.jpg'); // Original background image
+  img1 = loadImage('assets/sky1.png'); //Sky image
+  img2 = loadImage('assets/water1.png'); //Water image
+  img3 = loadImage('assets/house.png'); //House image
+  imgoriginal = loadImage('assets/1.jpg'); //Original image
 }
 
+// Change mode and create particles when keys are pressed
 function keyPressed() {
-  if (start) {
-    if (key == 'a') {
-      mode = 0
-      createParticle()
-      background()
-    } else if (key == 'b') {
-      mode = -1
-      createParticle()
-      background()
-    } else if (key == 'c') {
-      mode = 1
-      createParticle()
-      background()
+  if (start) {// If start is true (intro screen is hidden)
+    if (key == 'a') { 
+      mode = 0;// Mode 0: initiate particle motion
+      createParticle();
+      background();
+    } else if (key == 'b') { 
+      mode = -1;// Mode -1: reset position
+      createParticle();
+      background();
+    } else if (key == 'c') { 
+      mode = 1;// Mode 1: size control
+      createParticle();
+      background();
+    } else if (key == 'd') { 
+      mode = 2;// Mode 2: color change
+      createParticle();
+      background();
     }
   } else {
-    start = true
-    background()
+    start = true; // Start the animation if it hasn't started yet
+    background();
   }
 }
 
+ // Canvas setup and initial particle creation
 function setup() {
-  // Canvas setup and initial particle creation
   createCanvas(windowWidth, windowHeight);
   createParticle();
 }
 
-
+// Generate particles from images
+// Create particles for each layer based on pixel color and brightness
 function createParticle() {
-  // Create particles for each layer based on pixel color and brightness
-  particles1 = [];// Clear existing particles
+  // Clear existing particles
+  particles1 = [];
   particles2 = [];
   particles3 = [];
 
@@ -68,7 +73,7 @@ function createParticle() {
     }
   }
 
-  // Create particles for the water layer
+    // Create particles for the water layer
   let imgCopy2 = img2.get();
   imgCopy2.resize(width, height);
   for (let x = 0; x < imgCopy2.width; x += partSize2) {
@@ -79,8 +84,7 @@ function createParticle() {
       }
     }
   }
-
-  // Create particles for the  layer
+// Create particles for the House layer
   let imgCopy3 = img3.get();
   imgCopy3.resize(width, height);
   for (let x = 0; x < imgCopy3.width; x += partSize3) {
@@ -93,97 +97,93 @@ function createParticle() {
   }
 }
 
+// Adjust canvas size on window resize and redraw particles
 function windowResized() {
-  // Resize canvas and particles when window is resized
   resizeCanvas(windowWidth, windowHeight);
   createParticle();
   background();
 }
 
+// Create gradient background with three colors
 function background() {
-  // Draw a gradient background using three colors
-  c1 = color(126, 164, 255); // Top color
-  c2 = color(255, 178, 68); // Middle color
-  c3 = color(144, 183, 255); // Bottom color
-  for (let y = 0; y < height * 0.5; y += 1) {
+  c1 = color(126, 164, 255);
+  c2 = color(255, 178, 68);
+  c3 = color(144, 183, 255);
+
+  for (let y = 0; y < height * 0.5; y++) {
     let c = lerpColor(c1, c2, map(y, 0, height * 0.5, 0, 1));
     stroke(c);
-    strokeWeight(1);
     line(0, y, width, y);
   }
-  for (let y = height * 0.5; y < height; y += 1) {
+  for (let y = height * 0.5; y < height; y++) {
     let c = lerpColor(c2, c3, map(y, height * 0.5, height, 0, 1));
     stroke(c);
-    strokeWeight(1);
     line(0, y, width, y);
   }
 }
 
+// Draw function for updating particles
 function draw() {
-  // Main animation loop, drawing particles or introductionpageductionpage screen based on start variable
-  if (start) {
-    if (mode == 2) {
-      colChange += 1; // Control flicker interval for color change
-      if (colChange > 10) {
+  if (start) {// If the introductionpage is hidden
+    if (mode == 2) {//If in mode 2
+      colChange++;
+      if (colChange > 10) { // Adjust interval for flashing effect
         colChange = 0;
       }
     }
 
-    // Update and display sky particles
+    // Display particles from each array
     for (let i = 0; i < particles1.length; i++) {
-      particles1[i].update();
-      particles1[i].move();
-      particles1[i].changeCol2();
-      particles1[i].display();
+      particles1[i].update();// change the sizes of particles with noise
+      particles1[i].move();// moving particles based on noise
+      particles1[i].changeCol2();//If in mode 2,change color
+      particles1[i].display();// show particles of waters as ellipse
     }
-
-    // Update and display house particles
     for (let i = 0; i < particles3.length; i++) {
-      particles3[i].changeCol1();
-      particles3[i].display();
+      particles3[i].changeCol1();//If in mode 2,change color
+      particles3[i].display();//show particles
     }
-
-    // Update and display water particles
     for (let i = 0; i < particles2.length; i++) {
-      particles2[i].move();
-      particles2[i].changeCol2();
-      particles2[i].displayLine();
+      particles2[i].move();//move particles
+      particles2[i].changeCol2();//If in mode 2,change color
+      particles2[i].displayLine();//Show particles as line
     }
   } else {
-    introductionpage(); // Display introductionpage screen if animation hasn't started
+    introductionpage();
   }
 }
 
+// Display introductionpage screen with instructions
 function introductionpage() {
-  // Display the original image and instructions before starting particle animation
   image(imgoriginal, 0, 0, width, height);
   fill(255);
   textSize(25);
   textAlign(CENTER, CENTER);
-  text("press A to start the particle motion\npress B to return the original position\npress C to start sizing", width / 2, height / 2);
+  text("press A to start the particle motion\npress B to return the original position\npress C to start sizing\npress D to change the color of house", width / 2, height / 2);
 }
 
+// Particle class defining behavior and appearance of particles
 class Particle {
   constructor(x, y, col, w, h) {
-      // Initialize particle properties
+    //initial coordinates
     this.x = x;
     this.y = y;
-    this.col = col;
-    this.init(); // Initialize particle position and color
-    this.w = w;
-    this.h = h;
+    this.col = col;//color of particles
+    this.init();//Initialize particle properties
+    this.w = w;//weight
+    this.h = h;//hight
     this.size = 1;
   }
 
+  // Display the particle as an ellipse
   display() {
-    // Display particle as an ellipse
     noStroke();
     fill(this.r, this.g, this.b);
     ellipse(this.pos.x, this.pos.y, this.w * this.size, this.h * this.size);
   }
 
+  // Change color randomly if in mode 2
   changeCol1() {
-    // Randomly change particle color if mode 2 is active
     if (mode == 2 && colChange == 0) {
       this.r = random(255);
       this.g = random(255);
@@ -191,17 +191,17 @@ class Particle {
     }
   }
 
+  // Adjust color based on noise value
   changeCol2() {
-    // Change particle color to shades of gray if mode 2 is active
     if (mode == 2 && colChange == 0) {
-      this.r = random(255);
-      this.g = this.r;
+      this.r = random(255);//random color
+      this.g = this.r;//make the color black & white & gray
       this.b = this.g;
     }
   }
 
+  // Update particle size using Perlin noise if in mode 1
   update() {
-    // Control particle size based on noise function in mode 1
     if (mode == 1) {
       this.size = map(noise(this.pos.x * 0.01, this.pos.y * 0.01, frameCount * 0.05), 0, 1, 0.5, 3);
     } else {
@@ -209,8 +209,8 @@ class Particle {
     }
   }
 
+  // Initialize particle position and color
   init() {
-    // Initialize particle position and RGB color values
     this.pos = createVector(this.x, this.y);
     this.vel = createVector();
     this.r = red(this.col);
@@ -218,19 +218,20 @@ class Particle {
     this.b = blue(this.col);
   }
 
+  // Display particle as a line
   displayLine() {
-    // Display particles with a vertical oscillation effect
     noStroke();
     fill(this.r, this.g, this.b);
+    //The y-coordinate is shifted based on the sine function
     ellipse(this.pos.x, this.pos.y + sin(this.pos.x * 0.01) * partSize2 * 0.5, this.w, this.h);
   }
 
+  // Move particle based on noise if mode is 0
   move() {
-      // Move particles using Perlin noise for smooth, random effect
-      if (mode == 0) {
-      var angle = noise(this.pos.x * 0.01, this.pos.y * 0.01) * TWO_PI;
-      this.vel.set(cos(angle), sin(angle));
-      this.vel.mult(0.4); // Control speed
+    if (mode == 0) {
+      let angle = noise(this.pos.x * 0.01, this.pos.y * 0.01) * TWO_PI;
+      this.vel.set(cos(angle), sin(angle));//directional
+      this.vel.mult(0.4);
       this.pos.add(this.vel);
     }
   }
