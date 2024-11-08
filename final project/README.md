@@ -35,7 +35,14 @@ I retained the move( ), init( ), and class( ) portions from this code to replica
 
 Similarly, I altered particle movement to change particle size, reusing the init( ) and class( ) portions to achieve the effect of particles changing size based on noise when pressing C. Otherwise, an introductory screen is displayed.
 
-For the final effect, I didn't continue using Perlin noise. Instead, I used random color generation to create random colors. However, using random colors for the entire scene would be too chaotic, so I only applied it to the main house, making it colorful while setting the background to black, white, and gray. This effect is triggered when both conditions start=true and mode=2 (controlling color flashing) are met. Otherwise, the introductory screen is displayed.
+For the final effect, I didn't continue using Perlin noise. Instead, I used random color generation to create random colors. However, using random colors for the entire scene would be too chaotic, so I only applied it to the main house, making it colorful while setting the background to black, white, and gray. This effect is triggered when both conditions start=true and mode=2 (controlling color flashing) are met. Otherwise, the introduction page is displayed.
+
+### Appendix
+I use chatgpt for some code error correction and some code and function usage.
+![image of use chatgpt 1](assets/chat1.png)
+![image of use chatgpt 1](assets/chat2.png)
+![image of use chatgpt 1](assets/chat3.png)
+![image of use chatgpt 1](assets/chat4.png)
 
 ### Reference List
 
